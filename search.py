@@ -14,7 +14,6 @@ class Search:
     @staticmethod
     def breadthFirst(initial_node):
 
-        print("BreadthFirst:")
         # Check if the start element is the goal
         if initial_node.state.isGoal(Node.wall_space_obstacle):
             return initial_node, 0
@@ -57,11 +56,84 @@ class Search:
                         print("Goal reached")
                         return child, step
 
-    @staticmethod
-    # A* Search Algorithm
+    """ Informed Search """
+    """ @staticmethod
     def A(initial_node, heuristic=1):
+        
+        # Check if the start element is the goal
+        if initial_node.state.isGoal(Node.wall_space_obstacle):
+            return initial_node, 0
 
-        print("A star:")
+        # Evaluate the cost f for the initial node
+        initial_node.F_Evaluation(heuristic)
+
+        # Create the OPEN queue with the initial node as the first element
+        open = deque([initial_node])
+
+        # Create the CLOSED list
+        closed = list()
+        
+        step = 0
+        while True:
+
+            step +=1
+            print (f'*** Step {step} ***')            
+            
+            # Check if the OPEN queue is empty => goal not found 
+            if len(open) == 0:
+                return None, -1
+            
+            # Get the first element of the OPEN queue after sorting
+            open = deque(sorted(list(open), key=lambda node: node.f))
+            current = open.popleft()
+            
+            # Put the current node in the CLOSED list
+            closed.append(current)
+            
+            # Check if the current state is a goal
+            if current.state.isGoal(Node.wall_space_obstacle):
+                print ("Goal reached") 
+                return current, step 
+
+            # Generate the successors of the current node
+            succ = current.succ()
+            while len(succ) != 0:
+                # Pop a child node from the list of successors 
+                child = succ.popleft()
+                # Evaluate the cost f for this child node
+                child.F_Evaluation(heuristic)
+                
+                # If the child is in the OPEN queue
+                if child.state.robot_block in [n.state.robot_block for n in open]:
+                    # Get the index of the child in the OPEN queue
+                    index = [n.state.robot_block for n in open].index(child.state.robot_block)
+                    # Replace the node in the OPEN queue by the new one if its cost f is less than the old one
+                    if open[index].f > child.f:
+                        # Remove the old node from the OPEN queue
+                        open.remove(open[index])
+                        # Put the new node with the minimal cost f in the OPEN queue 
+                        open.append(child) 
+
+                # If the child is not in the OPEN queue    
+                else:
+                    # If the child is not in the CLOSED list
+                    if child.state.robot_block not in [n.state.robot_block for n in closed]:
+                        # Put the child in the OPEN queue 
+                        open.append(child)  
+
+                    # If the child is in the CLOSED list
+                    else:
+                        # Get the index of the child in the CLOSED list
+                        index = [n.state.robot_block for n in closed].index(child.state.robot_block)
+                        # Remove the node from the CLOSED list and add the new one in the OPEN queue if its cost f is less than the old one
+                        if closed[index].f > child.f:
+                            # Remove the child from the CLOSED list
+                            closed.remove(closed[index])
+                            # Put the child in the OPEN queue 
+                            open.append(child) """
+
+    @staticmethod
+    def A(initial_node, heuristic=1):
 
         # Check if the initial node is the goal
         if initial_node.state.isGoal(Node.wall_space_obstacle):
@@ -77,10 +149,10 @@ class Search:
         closed = list()
 
         step = 0
-        while True:  # While the open list is not empty
+        while True:
 
             step += 1
-            print(f'*** Step {step} ***')
+            #print (f'*** Step {step} ***')
 
             # Check if the OPEN list is empty => goal not found
             if len(open) == 0:
@@ -103,10 +175,10 @@ class Search:
                 return current, step
 
             # Generate the successors of the current node
-            succD = current.succD()
-            while len(succD) != 0:
+            succ = current.succ()
+            while len(succ) != 0:
                 # Pop a child node from the list of successors
-                child = succD.popleft()
+                child = succ.popleft()
                 # Evaluate the cost f for this child node
                 child.F_Evaluation(heuristic)
 
@@ -202,11 +274,10 @@ def create_initial_node(board=None):
     # Separate walls, spaces and obstacles board from robot and boxes board
     robot_block = [['']*width for _ in range(height)]
     wall_space_obstacle = [['']*width for _ in range(height)]
-    # creer matrice deadlock initialement vide
     deadlock_matrice = [['']*width for _ in range(height)]
 
     for i, j in itertools.product(range(height), range(width)):
-        # Create a matrix of deadlocks
+        # Create a matrix of deadlocks:
         if board[i][j] == ' ' or board[i][j] == 'R':
             if ((board[i-1][j] == 'O' and board[i][j-1] == 'O') or (board[i-1][j] == 'O' and board[i][j+1] == 'O') or (board[i][j-1] == 'O' and board[i+1][j] == 'O') or (board[i][j+1] == 'O' and board[i+1][j]) == 'O'):
                 deadlock_matrice[i][j] = 'D'
@@ -239,6 +310,12 @@ def create_initial_node(board=None):
 level = board2
 initial_node = create_initial_node(board=level)
 
+#goalNode, num_steps = Search.breadthFirst(initial_node)
+# if goalNode:
+#    print (f"Optimal Solution found after {num_steps} steps")
+#    solution = goalNode.getSolution()
+# else:
+#    print ("Optimal solution not found")
 
 goalNode, num_steps = Search.A(initial_node, heuristic=3)
 if goalNode:

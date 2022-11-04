@@ -11,6 +11,7 @@ R => Robot
 
 class SokoPuzzle:
 
+    # Le joueur et les caisses qui sont des éléments dynamiques
     def __init__(self, robot_block, robot_position):
 
         # Initialize the SokoPuzzle Board
@@ -31,14 +32,15 @@ class SokoPuzzle:
             if self.robot_block[ind_x][ind_y] != 'B':
                 return False
         return True
+    # verifier si c'est un deadlock
 
     def isdead_lock(self, deadlock_matrice):
 
         S_indices_x, S_indices_y = np.where(np.array(deadlock_matrice) == 'D')
-
         for ind_x, ind_y in zip(S_indices_x, S_indices_y):
-            if self.robot_block[ind_x][ind_y] != 'B':
+            if self.robot_block[ind_x][ind_y] == 'B':
                 return False
+
         return True
 
     def executeMove(self, action, wall_space_obstacle):

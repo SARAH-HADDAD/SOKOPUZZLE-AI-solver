@@ -9,11 +9,12 @@ class Node:
 
     # The wall_space_obstacle is a static variable of the class Node
     wall_space_obstacle = []
+    # Les murs, les cases vides et les cases cibles qui sont des éléments statiques
     deadlock_matrice = []
 
     def __init__(self, sokoPuzzle, parent=None, move=""):
-        self.state = sokoPuzzle
-        self.parent = parent
+        self.state = sokoPuzzle  # Un état
+        self.parent = parent  # Un lien vers le nœud père
         if self.parent == None:
             self.moves = move
             # The function g represents the cost from the initial node to the current node. For the initial node, g=0
@@ -31,21 +32,12 @@ class Node:
         succs = deque()
         for m in self.state.moves:
             succState = deepcopy(self.state)
-            if succState.executeMove(m, Node.wall_space_obstacle):
-                succs.append(Node(succState, self, m))
-        return succs
-    # Generate the successors
-
-    def succD(self):
-        succs = deque()
-        for m in self.state.moves:
-            succState = deepcopy(self.state)
             if succState.isdead_lock(Node.deadlock_matrice):
                 if succState.executeMove(m, Node.wall_space_obstacle):
                     succs.append(Node(succState, self, m))
         return succs
-    # Return the search solution
 
+    # Return the search solution
     def getSolution(self):
         node = self
         solution = []
@@ -67,6 +59,7 @@ class Node:
             solution.append(state)
             node = node.parent
         solution = solution[::-1]
+        # print(solution)
         return solution
 
     # The estimation of the evaluation function f
