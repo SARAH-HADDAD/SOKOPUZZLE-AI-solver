@@ -9,8 +9,8 @@ class Node:
 
     # The wall_space_obstacle is a static variable of the class Node
     wall_space_obstacle = []
-    # Les murs, les cases vides et les cases cibles qui sont des éléments statiques
-    deadlock_matrice = []
+
+    deadlock_matrix = []
 
     def __init__(self, sokoPuzzle, parent=None, move=""):
         self.state = sokoPuzzle  # Un état
@@ -32,7 +32,7 @@ class Node:
         succs = deque()
         for m in self.state.moves:
             succState = deepcopy(self.state)
-            if succState.isdead_lock(Node.deadlock_matrice):
+            if succState.isdead_lock(Node.deadlock_matrix):
                 if succState.executeMove(m, Node.wall_space_obstacle):
                     succs.append(Node(succState, self, m))
         return succs

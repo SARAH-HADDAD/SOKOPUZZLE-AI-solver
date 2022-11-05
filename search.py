@@ -25,7 +25,7 @@ class Search:
         step = 0
         while True:
 
-            print(f'*** Step {step} ***')
+            #print(f'*** Step {step} ***')
             step += 1
 
             # Check if the OPEN queue is empty => goal not found
@@ -55,82 +55,6 @@ class Search:
                         print(f'*** Step {step} ***')
                         print("Goal reached")
                         return child, step
-
-    """ Informed Search """
-    """ @staticmethod
-    def A(initial_node, heuristic=1):
-        
-        # Check if the start element is the goal
-        if initial_node.state.isGoal(Node.wall_space_obstacle):
-            return initial_node, 0
-
-        # Evaluate the cost f for the initial node
-        initial_node.F_Evaluation(heuristic)
-
-        # Create the OPEN queue with the initial node as the first element
-        open = deque([initial_node])
-
-        # Create the CLOSED list
-        closed = list()
-        
-        step = 0
-        while True:
-
-            step +=1
-            print (f'*** Step {step} ***')            
-            
-            # Check if the OPEN queue is empty => goal not found 
-            if len(open) == 0:
-                return None, -1
-            
-            # Get the first element of the OPEN queue after sorting
-            open = deque(sorted(list(open), key=lambda node: node.f))
-            current = open.popleft()
-            
-            # Put the current node in the CLOSED list
-            closed.append(current)
-            
-            # Check if the current state is a goal
-            if current.state.isGoal(Node.wall_space_obstacle):
-                print ("Goal reached") 
-                return current, step 
-
-            # Generate the successors of the current node
-            succ = current.succ()
-            while len(succ) != 0:
-                # Pop a child node from the list of successors 
-                child = succ.popleft()
-                # Evaluate the cost f for this child node
-                child.F_Evaluation(heuristic)
-                
-                # If the child is in the OPEN queue
-                if child.state.robot_block in [n.state.robot_block for n in open]:
-                    # Get the index of the child in the OPEN queue
-                    index = [n.state.robot_block for n in open].index(child.state.robot_block)
-                    # Replace the node in the OPEN queue by the new one if its cost f is less than the old one
-                    if open[index].f > child.f:
-                        # Remove the old node from the OPEN queue
-                        open.remove(open[index])
-                        # Put the new node with the minimal cost f in the OPEN queue 
-                        open.append(child) 
-
-                # If the child is not in the OPEN queue    
-                else:
-                    # If the child is not in the CLOSED list
-                    if child.state.robot_block not in [n.state.robot_block for n in closed]:
-                        # Put the child in the OPEN queue 
-                        open.append(child)  
-
-                    # If the child is in the CLOSED list
-                    else:
-                        # Get the index of the child in the CLOSED list
-                        index = [n.state.robot_block for n in closed].index(child.state.robot_block)
-                        # Remove the node from the CLOSED list and add the new one in the OPEN queue if its cost f is less than the old one
-                        if closed[index].f > child.f:
-                            # Remove the child from the CLOSED list
-                            closed.remove(closed[index])
-                            # Put the child in the OPEN queue 
-                            open.append(child) """
 
     @staticmethod
     def A(initial_node, heuristic=1):
@@ -261,36 +185,36 @@ board5 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
           ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
 board6 = [['O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'S', ' ', 'O', ' ', 'R', 'O'],
-        ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
-        ['O', 'S', ' ', ' ', 'B', ' ', 'O'],
-        ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
-        ['O', 'S', ' ', 'O', ' ', ' ', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O']]
+          ['O', 'S', ' ', 'O', ' ', 'R', 'O'],
+          ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
+          ['O', 'S', ' ', ' ', 'B', ' ', 'O'],
+          ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
+          ['O', 'S', ' ', 'O', ' ', ' ', 'O'],
+          ['O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
 board7 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'S', 'S', 'S', ' ', 'O', 'O', 'O'],
-        ['O', ' ', 'S', ' ', 'B', ' ', ' ', 'O'],
-        ['O', ' ', ' ', 'B', 'B', 'B', ' ', 'O'],
-        ['O', 'O', 'O', 'O', ' ', ' ', 'R', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+          ['O', 'S', 'S', 'S', ' ', 'O', 'O', 'O'],
+          ['O', ' ', 'S', ' ', 'B', ' ', ' ', 'O'],
+          ['O', ' ', ' ', 'B', 'B', 'B', ' ', 'O'],
+          ['O', 'O', 'O', 'O', ' ', ' ', 'R', 'O'],
+          ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
 board8 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', ' ', ' ', ' ', ' ', 'O', 'O', 'O'],
-        ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
-        ['O', 'S', 'S', 'S', '*', 'B', 'R', 'O'],
-        ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
-        ['O', ' ', ' ', ' ', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+          ['O', ' ', ' ', ' ', ' ', 'O', 'O', 'O'],
+          ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
+          ['O', 'S', 'S', 'S', '*', 'B', 'R', 'O'],
+          ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
+          ['O', ' ', ' ', ' ', 'O', 'O', 'O', 'O'],
+          ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
 board9 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'S', ' ', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
-        ['O', 'S', ' ', 'S', ' ', 'O', 'O', 'O', 'O'],
-        ['O', ' ', 'B', ' ', 'B', 'B', ' ', ' ', 'O'],
-        ['O', 'O', 'O', 'S', ' ', ' ', 'B', 'R', 'O'],
-        ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
-        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+          ['O', 'O', 'O', 'S', ' ', 'O', 'O', 'O', 'O'],
+          ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
+          ['O', 'S', ' ', 'S', ' ', 'O', 'O', 'O', 'O'],
+          ['O', ' ', 'B', ' ', 'B', 'B', ' ', ' ', 'O'],
+          ['O', 'O', 'O', 'S', ' ', ' ', 'B', 'R', 'O'],
+          ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
+          ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
 """ This function will create from a board (a level): a static board (wall_space_obstacle) and a dynamic board (robot_block) 
     The static board will be the same in the whole search process (we will use it just for comparison), 
@@ -306,16 +230,14 @@ def create_initial_node(board=None):
     # Separate walls, spaces and obstacles board from robot and boxes board
     robot_block = [['']*width for _ in range(height)]
     wall_space_obstacle = [['']*width for _ in range(height)]
-    deadlock_matrice = [['']*width for _ in range(height)]
+    deadlock_matrix = [['']*width for _ in range(height)]
 
     for i, j in itertools.product(range(height), range(width)):
         # Create a matrix of deadlocks:
-        # Find the corner deadlocks :
+        # Find corner deadlocks :
         if board[i][j] == ' ' or board[i][j] == 'R':
             if ((board[i-1][j] == 'O' and board[i][j-1] == 'O') or (board[i-1][j] == 'O' and board[i][j+1] == 'O') or (board[i][j-1] == 'O' and board[i+1][j] == 'O') or (board[i][j+1] == 'O' and board[i+1][j]) == 'O'):
-                deadlock_matrice[i][j] = 'D'
-
-              
+                deadlock_matrix[i][j] = 'D'
 
         if board[i][j] == 'R':
             robot_position = (i, j)
@@ -334,77 +256,73 @@ def create_initial_node(board=None):
             robot_position = (i, j)
             robot_block[i][j] = 'R'
             wall_space_obstacle[i][j] = 'S'
-    
-    # Deadlock on line :  
+
+    # Deadlocks on line :
     for i, j in itertools.product(range(height), range(width)):
-        if(deadlock_matrice[i][j] == 'D'):
-            # Vertical 
-            LineDeadLock=False
-            y=j+1
-            while ((not LineDeadLock) and y<width):
-                if(deadlock_matrice[i][y] == 'D'):
-                    LineDeadLock=True
-                y=y+1
+        if (deadlock_matrix[i][j] == 'D'):
+            # Vertical
+            LineDeadLock = False
+            y = j+1
+            while ((not LineDeadLock) and y < width):
+                if (deadlock_matrix[i][y] == 'D'):
+                    LineDeadLock = True
+                y = y+1
 
-            limit=y     
-            y=j   
+            limit = y
+            y = j
 
-            while(LineDeadLock and y<=limit):
-                if(i!=0 or i!=width):
-                    if(board[i][y]=='S' or board[i][y]=='*' or (board[i+1][y]!='O' and board[i-1][y]!='O') ):
-                        LineDeadLock=False
+            while (LineDeadLock and y <= limit):
+                if (i != 0 or i != width):
+                    if (board[i][y] == 'S' or board[i][y] == '*' or (board[i+1][y] != 'O' and board[i-1][y] != 'O')):
+                        LineDeadLock = False
                     else:
-                        y=y+1   
+                        y = y+1
 
-            if(LineDeadLock):
-                y=j+1
-                while(y<limit):
-                    deadlock_matrice[i][y] = 'D'
-                    y=y+1
+            if (LineDeadLock):
+                y = j+1
+                while (y < limit):
+                    deadlock_matrix[i][y] = 'D'
+                    y = y+1
             # Horizontal
-            LineDeadLock=False
-            x=i+1
-            while ((not LineDeadLock) and x<height):
-                if(deadlock_matrice[x][j] == 'D'):
-                    LineDeadLock=True
-                x=x+1
+            LineDeadLock = False
+            x = i+1
+            while ((not LineDeadLock) and x < height):
+                if (deadlock_matrix[x][j] == 'D'):
+                    LineDeadLock = True
+                x = x+1
 
-            limit=x     
-            x=i   
-            while(LineDeadLock and x<=limit):
-                if(j!=0 or j!=height):
-                    if(board[x][j]=='S' or board[x][j]=='*' or (board[x][j+1]!='O' and board[x][j-1]!='O') ):
-                        LineDeadLock=False
+            limit = x
+            x = i
+            while (LineDeadLock and x <= limit):
+                if (j != 0 or j != height):
+                    if (board[x][j] == 'S' or board[x][j] == '*' or (board[x][j+1] != 'O' and board[x][j-1] != 'O')):
+                        LineDeadLock = False
                     else:
-                        x=x+1   
+                        x = x+1
 
-            if(LineDeadLock):
-                x=i+1
-                while(x<limit):
-                    deadlock_matrice[x][j] = 'D'
-                    x=x+1
+            if (LineDeadLock):
+                x = i+1
+                while (x < limit):
+                    deadlock_matrix[x][j] = 'D'
+                    x = x+1
 
-
-
-     
-        
     Node.wall_space_obstacle = wall_space_obstacle
-    Node.deadlock_matrice = deadlock_matrice
-    print(deadlock_matrice)
+    Node.deadlock_matrix = deadlock_matrix
+    #print(deadlock_matrix)
     initial_node = Node(SokoPuzzle(robot_block, robot_position))
 
     return initial_node
 
 
-level = board5
+level = board3
 initial_node = create_initial_node(board=level)
 
-#goalNode, num_steps = Search.breadthFirst(initial_node)
-# if goalNode:
-#    print (f"Optimal Solution found after {num_steps} steps")
-#    solution = goalNode.getSolution()
-# else:
-#    print ("Optimal solution not found")
+goalNode, num_steps = Search.breadthFirst(initial_node)
+if goalNode:
+    print(f"Optimal Solution found after {num_steps} steps")
+    solution = goalNode.getSolution()
+else:
+    print("Optimal solution not found")
 
 goalNode, num_steps = Search.A(initial_node, heuristic=3)
 if goalNode:
