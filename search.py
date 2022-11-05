@@ -1,3 +1,4 @@
+from urllib.request import CacheFTPHandler
 from sokoPuzzle import SokoPuzzle
 from node import Node
 from collections import deque
@@ -8,7 +9,7 @@ import pygame
 import time
 
 
-class Search:
+class Search():
 
     """ Uninformed/Blind Search """
     @staticmethod
@@ -314,15 +315,9 @@ def create_initial_node(board=None):
     return initial_node
 
 
-level = board3
+level = board2
 initial_node = create_initial_node(board=level)
 
-goalNode, num_steps = Search.breadthFirst(initial_node)
-if goalNode:
-    print(f"Optimal Solution found after {num_steps} steps")
-    solution = goalNode.getSolution()
-else:
-    print("Optimal solution not found")
 
 goalNode, num_steps = Search.A(initial_node, heuristic=3)
 if goalNode:
@@ -330,3 +325,63 @@ if goalNode:
     solution = goalNode.getSolution()
 else:
     print("Optimal solution not found")
+
+#l'interface du jeu :
+height = (len(level))*64
+width = (len(level[0]))*64
+pygame.init()
+#generer la fenetre de notre jeu
+pygame.display.set_caption("sokoPuzzle")
+screen=pygame.display.set_mode((width,height))
+background=pygame.image.load('assets/bg.jpg')
+running=True
+n = 1
+
+#Chargement de l'environment: 
+
+CASES = {
+    "R":   "assets/player.png",
+    "O":   "assets/block.png",
+    " ":   "assets/ground.png",
+    "S":   "assets/environment.png",
+    "B":   "assets/crate1.png",
+    "*":   "assets/crate2.png",
+    ".":   "assets/player.png"
+}
+#boucle tant que cette condition est vrai
+while running:
+    #applique l'arriere plan de notre jeu 
+    screen.blit(background,(0,0))
+#start
+    for i in range (len(level[0])) : 
+        for j in range (len(level)): 
+            screen.blit(pygame.image.load(CASES[level[j][i]]).convert_alpha(),(i*64,j*64))
+
+    
+
+    for x in range(len(solution)):
+        #givess about 0.5 seconds before the next matrix shows
+        time.sleep(1) 
+        #mettre à jour l'écran
+        pygame.display.flip()
+        map=solution[x]
+        for i in range (len(map[0])) : 
+            for j in range (len(map)): 
+                screen.blit(pygame.image.load(CASES[map[j][i]]).convert_alpha(),(i*64,j*64))
+
+
+
+    #si le joueur ferme cette fentre
+    for event in pygame.event.get():
+        #que l'evenement est fermeture de fenetre
+        if event.type == pygame.QUIT:
+            running = False 
+            pygame.quit()
+            print("Fermeture de jeu")
+        
+
+
+   
+    
+
+
