@@ -260,6 +260,38 @@ board5 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
           ['O', 'O', 'O', ' ', ' ', 'S', 'O', 'O', 'O'],
           ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
 
+board6 = [['O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'S', ' ', 'O', ' ', 'R', 'O'],
+        ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
+        ['O', 'S', ' ', ' ', 'B', ' ', 'O'],
+        ['O', ' ', ' ', 'O', 'B', ' ', 'O'],
+        ['O', 'S', ' ', 'O', ' ', ' ', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O']]
+
+board7 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'S', 'S', 'S', ' ', 'O', 'O', 'O'],
+        ['O', ' ', 'S', ' ', 'B', ' ', ' ', 'O'],
+        ['O', ' ', ' ', 'B', 'B', 'B', ' ', 'O'],
+        ['O', 'O', 'O', 'O', ' ', ' ', 'R', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+
+board8 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', ' ', ' ', ' ', ' ', 'O', 'O', 'O'],
+        ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
+        ['O', 'S', 'S', 'S', '*', 'B', 'R', 'O'],
+        ['O', ' ', ' ', ' ', 'B', ' ', ' ', 'O'],
+        ['O', ' ', ' ', ' ', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+
+board9 = [['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'S', ' ', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
+        ['O', 'S', ' ', 'S', ' ', 'O', 'O', 'O', 'O'],
+        ['O', ' ', 'B', ' ', 'B', 'B', ' ', ' ', 'O'],
+        ['O', 'O', 'O', 'S', ' ', ' ', 'B', 'R', 'O'],
+        ['O', 'O', 'O', ' ', ' ', 'O', 'O', 'O', 'O'],
+        ['O', 'O', 'O', 'O', 'O', 'O', 'O', 'O', 'O']]
+
 """ This function will create from a board (a level): a static board (wall_space_obstacle) and a dynamic board (robot_block) 
     The static board will be the same in the whole search process (we will use it just for comparison), 
     so it's better to declare it as a static variable in the class Node 
@@ -278,9 +310,12 @@ def create_initial_node(board=None):
 
     for i, j in itertools.product(range(height), range(width)):
         # Create a matrix of deadlocks:
+        # Find the corner deadlocks :
         if board[i][j] == ' ' or board[i][j] == 'R':
             if ((board[i-1][j] == 'O' and board[i][j-1] == 'O') or (board[i-1][j] == 'O' and board[i][j+1] == 'O') or (board[i][j-1] == 'O' and board[i+1][j] == 'O') or (board[i][j+1] == 'O' and board[i+1][j]) == 'O'):
                 deadlock_matrice[i][j] = 'D'
+
+              
 
         if board[i][j] == 'R':
             robot_position = (i, j)
@@ -299,15 +334,69 @@ def create_initial_node(board=None):
             robot_position = (i, j)
             robot_block[i][j] = 'R'
             wall_space_obstacle[i][j] = 'S'
+    
+    # Deadlock on line :  
+    for i, j in itertools.product(range(height), range(width)):
+        if(deadlock_matrice[i][j] == 'D'):
+            # Vertical 
+            LineDeadLock=False
+            y=j+1
+            while ((not LineDeadLock) and y<width):
+                if(deadlock_matrice[i][y] == 'D'):
+                    LineDeadLock=True
+                y=y+1
 
+            limit=y     
+            y=j   
+
+            while(LineDeadLock and y<=limit):
+                if(i!=0 or i!=width):
+                    if(board[i][y]=='S' or board[i][y]=='*' or (board[i+1][y]!='O' and board[i-1][y]!='O') ):
+                        LineDeadLock=False
+                    else:
+                        y=y+1   
+
+            if(LineDeadLock):
+                y=j+1
+                while(y<limit):
+                    deadlock_matrice[i][y] = 'D'
+                    y=y+1
+            # Horizontal
+            LineDeadLock=False
+            x=i+1
+            while ((not LineDeadLock) and x<height):
+                if(deadlock_matrice[x][j] == 'D'):
+                    LineDeadLock=True
+                x=x+1
+
+            limit=x     
+            x=i   
+            while(LineDeadLock and x<=limit):
+                if(j!=0 or j!=height):
+                    if(board[x][j]=='S' or board[x][j]=='*' or (board[x][j+1]!='O' and board[x][j-1]!='O') ):
+                        LineDeadLock=False
+                    else:
+                        x=x+1   
+
+            if(LineDeadLock):
+                x=i+1
+                while(x<limit):
+                    deadlock_matrice[x][j] = 'D'
+                    x=x+1
+
+
+
+     
+        
     Node.wall_space_obstacle = wall_space_obstacle
     Node.deadlock_matrice = deadlock_matrice
+    print(deadlock_matrice)
     initial_node = Node(SokoPuzzle(robot_block, robot_position))
 
     return initial_node
 
 
-level = board2
+level = board5
 initial_node = create_initial_node(board=level)
 
 #goalNode, num_steps = Search.breadthFirst(initial_node)

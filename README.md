@@ -29,13 +29,13 @@ board4= 2735 steps
 board5= 1539 steps
 
 # A avec l'heuristique 3 avec détection des deadlocks:
-board1=
-board2=
-board3=
-board4=
-board5=
+board1= 6 steps
+board2= 294 steps
+board3= 387 steps
+board4= 975 steps
+board5= 843 steps
 
-board6=
-board7=
-board8=
-board9=
+board6= 1063 steps
+board7= 6383 steps
+board8= 13740 steps
+board9= 19575 steps
