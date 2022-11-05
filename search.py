@@ -315,7 +315,7 @@ def create_initial_node(board=None):
     return initial_node
 
 
-level = board2
+level = board3
 initial_node = create_initial_node(board=level)
 
 
@@ -335,7 +335,7 @@ pygame.display.set_caption("sokoPuzzle")
 screen=pygame.display.set_mode((width,height))
 background=pygame.image.load('assets/bg.jpg')
 running=True
-n = 1
+
 
 #Chargement de l'environment: 
 
@@ -348,6 +348,10 @@ CASES = {
     "*":   "assets/crate2.png",
     ".":   "assets/player.png"
 }
+#Steps : {len(solution)}
+text = f"Steps : {num_steps}   "
+text_font = pygame.font.SysFont("Comic Sans MS", 25)
+text_render = text_font.render(text, False, (255, 255, 255))
 #boucle tant que cette condition est vrai
 while running:
     #applique l'arriere plan de notre jeu 
@@ -360,7 +364,7 @@ while running:
     
 
     for x in range(len(solution)):
-        #givess about 0.5 seconds before the next matrix shows
+        #givess about 1 seconds before the next matrix shows
         time.sleep(1) 
         #mettre à jour l'écran
         pygame.display.flip()
@@ -369,8 +373,11 @@ while running:
             for j in range (len(map)): 
                 screen.blit(pygame.image.load(CASES[map[j][i]]).convert_alpha(),(i*64,j*64))
 
-
-
+    
+    pygame.display.flip() 
+    screen.blit(text_render, (0, 0))
+    pygame.display.flip()
+    time.sleep(5)
     #si le joueur ferme cette fentre
     for event in pygame.event.get():
         #que l'evenement est fermeture de fenetre
